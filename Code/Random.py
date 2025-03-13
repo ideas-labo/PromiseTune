@@ -55,16 +55,14 @@ def run_main(seed, name):
     )
     print( xs, result, res)
 
-
 if __name__ == '__main__':
-    
-    seeds = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
+    seeds = [1]
     # mp.freeze_support()
     # pool = mp.Pool(processes=200)
-
-    for name in ['exastencils','dconvert','7z',"BDBC",'deeparch',
+    systems = ['exastencils','dconvert','7z',"BDBC",'deeparch',
                  'PostgreSQL','javagc','storm','x264',
-                 'redis', 'HSQLDB','LLVM']:
+                 'redis', 'HSQLDB','LLVM']
+    for name in systems:
         for seed in seeds:
             run_main(seed, name)
     # pool.close()

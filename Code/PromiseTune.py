@@ -131,7 +131,7 @@ def random_search_with_static_distribution_cold(max_iterations, stop_threshold, 
                 break  
     return xs, best_value
 
-def get_training_sequence_by_PromiseTune(training_indep, training_dep, eta, file, sample, k):
+def get_training_sequence_by_PromiseTune(training_indep, training_dep, eta, file, rule, sample, k):
     global sample_plus
     p = 0.01
     max_iter = int(1e4)
@@ -140,16 +140,17 @@ def get_training_sequence_by_PromiseTune(training_indep, training_dep, eta, file
     estimators = model.estimators_
     every_column = file.independent_set
     header = file.features
-    ACEs, all_path = cause_find(training_indep, training_dep, file, sample+sample_plus)
     Rule, candidates = [], []
-    for i, path in zip(ACEs, all_path):
-        if i<0:
-            for indep, _ in best_configs:
-                if in_rule(indep, path, header):
-                    Rule += path
-                    print("==>RULE:", [merge_constraints(path)], " ==>ACE:",i)
-                    break
-    if not has_negative_value(ACEs):
+    if rule == True:
+        ACEs, all_path = cause_find(training_indep, training_dep, file, sample+sample_plus)
+        for i, path in zip(ACEs, all_path):
+            if i<0:
+                for indep, _ in best_configs:
+                    if in_rule(indep, path, header):
+                        Rule += path
+                        print("==>RULE:", [merge_constraints(path)], " ==>ACE:",i)
+                        break
+    if (rule == True and not has_negative_value(ACEs)) or rule == False:
         xs, _ = random_search_with_static_distribution_cold(max_iter, p, every_column, estimators, eta)
         candidates.extend(xs)
     else:
@@ -188,8 +189,8 @@ def get_training_sequence_by_PromiseTune(training_indep, training_dep, eta, file
             candidates.extend(xs)
     return candidates, model, Rule
 
-def get_best_configuration_id_PromiseTune(training_indep, training_dep, eta, file, sample, k):
-    test_sequence, model, Rule = get_training_sequence_by_PromiseTune(training_indep, training_dep, eta, file, sample, k)
+def get_best_configuration_id_PromiseTune(training_indep, training_dep, eta, file, rule, sample, k):
+    test_sequence, model, Rule = get_training_sequence_by_PromiseTune(training_indep, training_dep, eta, file, rule, sample, k)
     estimators = model.estimators_
     pred = []
     for e in estimators:
@@ -201,11 +202,12 @@ def get_best_configuration_id_PromiseTune(training_indep, training_dep, eta, fil
         if x[0] not in training_indep:
             return x[0], Rule
 
-def PromiseTune(filename, initial_size, maxlives, budget, seed, l, k):
+def PromiseTune(filename, initial_size, maxlives, budget, seed, rule, l, k):
     global sample_plus
     random.seed(seed)
     np.random.seed(seed)
     steps, sample_plus = 0, 0
+    configuration_b = None
     results, x_axis, xs, Rules = [], [], [], []
     result = float('inf')
     lives = maxlives
@@ -223,11 +225,10 @@ def PromiseTune(filename, initial_size, maxlives, budget, seed, l, k):
         results.append(reward)    
 
     exist_configuration = training_indep[:]
-    best_loop = 0
     while initial_size + steps < budget:
         steps += 1
         best_solution, Rule = get_best_configuration_id_PromiseTune(
-            training_indep, training_dep, result, file, l, k)
+            training_indep, training_dep, result, file, rule, l, k)
         best_result, configuration = get_objective.get_objective(
             file.dict_search, best_solution)
         Rules.append(Rule)
@@ -237,9 +238,9 @@ def PromiseTune(filename, initial_size, maxlives, budget, seed, l, k):
         xs.append(configuration)
         results.append(best_result)
         if best_result < result:
+            configuration_b = configuration
             result = best_result
             lives = maxlives
-            best_loop = steps
         else:
             lives -= 1
         if configuration in exist_configuration:
@@ -249,24 +250,23 @@ def PromiseTune(filename, initial_size, maxlives, budget, seed, l, k):
         print('=>Loop:', steps, ' =>Reward:', '{:.2f}'.format(best_result), ' =>Config:', configuration)
         if lives == 0:
             break
-    return np.array(xs), np.array(results), Rules
+    return configuration_b, Rules
 
 def run_main(seed, name):
-    xs, result,  Rules = PromiseTune(
+    best_configuration, Rules = PromiseTune(
         filename=f"./Data/{name}.csv",
         initial_size=10,
         maxlives=200,
         budget=100,
         seed=seed,
+        rule=True,
         l=10,
         k=0.1
     )
-    print(xs, result, Rules)
-
+    print(best_configuration, Rules)
 
 if __name__ == '__main__':
-    
-    seeds = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
+    seeds = [1]
     # mp.freeze_support()
     # pool = mp.Pool(processes=200)
 
