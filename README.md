@@ -5,9 +5,9 @@ This repository contains the data and code for the following paper:
 > PromiseTune: Unveiling Causally Promising and Explainable Configuration Tuning
 
 ## Introduction
-The high configurability of modern software systems has made configuration tuning a crucial step for assuring system performance, e.g., latency or throughput. However, given the expensive measurements, large configuration space, and rugged configuration landscape, existing tuners suffer ineffectiveness due to the difficult balance of budget utilization between exploring uncertain regions (for escaping from local optima) and exploiting guidance of known good configurations (for fast convergence). The root cause is that we lack knowledge of where the **promising regions** lay, which also causes challenges in the explainability of the results.
+> The high configurability of modern software systems has made configuration tuning a crucial step for assuring system performance, e.g., latency or throughput. However, given the expensive measurements, large configuration space, and rugged configuration landscape, existing tuners suffer ineffectiveness due to the difficult balance of budget utilization between exploring uncertain regions (for escaping from local optima) and exploiting guidance of known good configurations (for fast convergence). The root cause is that we lack knowledge of where the **promising regions** lay, which also causes challenges in the explainability of the results.
 
-In this paper, we propose **PromiseTune** that tunes configuration guided by casually purified rules. PromiseTune is unique in the sense that we learn rules, which reflect certain regions in the configuration landscape, and purify them with causal inference. The remaining rules serve as approximated reflection of the promising regions, bounding the tuning to emphasize on these places in the landscape. This, as we demonstrate, can effectively mitigate the impact of exploration and exploitation trade-off. Those purified regions can then be paired with the measured configurations to provide spatial explainability at the landscape level. We evaluate PromiseTune against 10 state-of-the-art tuners on 12 systems and varying budgets, revealing that it performs significantly better than the others on 86% cases while providing richer information to explain the hidden system characteristics.
+> In this paper, we propose **PromiseTune** that tunes configuration guided by casually purified rules. PromiseTune is unique in the sense that we learn rules, which reflect certain regions in the configuration landscape, and purify them with causal inference. The remaining rules serve as approximated reflection of the promising regions, bounding the tuning to emphasize on these places in the landscape. This, as we demonstrate, can effectively mitigate the impact of exploration and exploitation trade-off. Those purified regions can then be paired with the measured configurations to provide spatial explainability at the landscape level. We evaluate PromiseTune against 10 state-of-the-art tuners on 12 systems and varying budgets, revealing that it performs significantly better than the others on 86% cases while providing richer information to explain the hidden system characteristics.
 
 
 ## Systems
@@ -28,10 +28,10 @@ In this paper, we propose **PromiseTune** that tunes configuration guided by cas
 | LLVM       | 3.0     | LLVM’s test suite                                  | Compiler          | C++      | Runtime (ms)        | 10/0                           | $1.02 \times 10^3$         |
 
 ## Code Structure
-   - Data (Datasets, the target need to start with "$<")<br>
-   - util (Util for tuners)<br>
-   - requirements.txt (Essential requirments need to be installed) <br>
-   - PromiseTune (The reproduction code of PromiseTune)
+   - Data => Datasets, the target need to start with "$<"<br>
+   - util => Util for tuners<br>
+   - requirements.txt => Essential requirments need to be installed <br>
+   - PromiseTune.py => The reproduction code of PromiseTune
 
 ## Quick Start
 
@@ -49,5 +49,5 @@ python3 PromiseTune.py
 ```
 If you have your own dataset, put the CSV file in "Code/Data/" and the target need to start with "$<". Finally, add it to the datasets list and run PromiseTune.
 
-##  RQ Supplementary
-RQ supplementary contains the supplementary files for our research finds.
+##  RQ_supplementary
+RQ_supplementary contains the supplementary files for our research finds.
