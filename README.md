@@ -66,7 +66,7 @@ Below are the repositories of the SOTA performance prediction models, which are 
  - [Unicorn](https://github.com/softsys4ai/unicorn): an approach to analyze the performance of configurable systems through causal reasoning, which recovers the causal structure from performance data to help identify the root causes of performance failures, estimate parameter causal effects, and give recommendations for optimal configurations.
 
 ### Compiler Tuners
- - [BOCA](https://github.com/BOCA313/BOCA): the first automatic compiler tuning method based on Bayesian optimization, which designs novel search strategies by approximating the objective function using a tree-based model.
+ - [BOCA](https://github.com/BOCA313/BOCA): an automatic compiler tuning method based on bayesian optimization, which designs novel search strategies by approximating the objective function using a tree-based model.
  - [CFSCA](https://github.com/zhumxxx/CFSCA): a compiler auto-tuning technique based on key flags selection, which determines potentially relevant flags by analyzing the program structure and compiler documentation, and then identifies the key flags by statistical analysis to narrow down the search space, so as to select an optimized sequence for the target program to improve performance.
 
 ### Database Tuners
