@@ -50,4 +50,4 @@ python3 PromiseTune.py
 If you have your own dataset, put the CSV file in "Code/Data/" and the target need to start with "$<". Finally, add it to the datasets list and run PromiseTune.
 
 ##  RQ Supplementary
-RQ_supplementary contains the supplementary files for our research finds.
+RQ supplementary contains the supplementary files for our research finds.
