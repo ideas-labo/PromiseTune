@@ -12,7 +12,7 @@ This repository contains the data and code for the following paper:
 
 ## Systems
 
-| System     | Version | Benchmark    | Domain            | Language | Performance         | $B/N$ | S_space    |
+| System     | Version | Benchmark    | Domain            | Language | Performance         | $B/N$ | $S_{space}$    |
 | ---------- | ------- | -------------------------------------------------- | ----------------- | -------- | ------------------- | ------------------------------ | ------------------------- |
 | 7z         | 9.20    | Compressing a 3 GB directory                       | File Compressor   | C++      | Runtime (ms)        | 11/3                           | $1.68 \times 10^8$         |
 | DConvert   | 1.0.0   | Transform resources at different scales            | Image Scaling     | Java     | Runtime (s)         | 17/1                           | $1.05 \times 10^7$         |
