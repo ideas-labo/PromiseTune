@@ -5,14 +5,14 @@ Below are the repositories of the SOTA performance prediction models, which are 
 
 ## General Tuners
  - Random: a commonly used random search strategy, which is simple to implement and performs well in some cases.
- - [SMAC](https://github.com/automl/SMAC3): an algorithm configuration method based on sequence model optimization, which deals with categorical parameters by constructing a random forest model to select promising configurations in the algorithm configuration space.
+ - [SMAC](https://github.com/automl/SMAC3): a sequential model-based optimization, which deals with categorical parameters by constructing a random forest model to select promising configurations in the algorithm configuration space.
  - [GA](https://github.com/jMetal/jMetalPy): a genetic algorithm for optimal configurations using natural selection and cross-variance heuristics.
  - [MBO](https://github.com/PKU-DAIR/open-box): a bayesian model-based approach which constructs the mixed kernel gausian process model to predict the objective function and uses the model to guide the search.
 
 
 ## Configuration Tuners
- - [FLASH](https://github.com/FlashRepo/Flash-SingleConfig): a sequential model-based approach that efficiently solves the single-objective configuration optimization problem for software systems and requires fewer measurements in the search for better configurations by using a priori knowledge of the configuration space to select the next promising configuration .
- - [Unicorn](https://github.com/softsys4ai/unicorn): an approach to analyze the performance of configurable systems through causal reasoning, which recovers the causal structure from performance data to help identify the root causes of performance failures, estimate parameter causal effects, and give recommendations for optimal configurations .
+ - [FLASH](https://github.com/FlashRepo/Flash-SingleConfig): a sequential model-based approach that efficiently solves the single-objective configuration optimization problem for software systems and requires fewer measurements in the search for better configurations by using a priori knowledge of the configuration space to select the next promising configuration.
+ - [Unicorn](https://github.com/softsys4ai/unicorn): an approach to analyze the performance of configurable systems through causal reasoning, which recovers the causal structure from performance data to help identify the root causes of performance failures, estimate parameter causal effects, and give recommendations for optimal configurations.
 
 ## Compiler Tuners
  - [BOCA](https://github.com/BOCA313/BOCA): the first automatic compiler tuning method based on Bayesian optimization, which designs novel search strategies by approximating the objective function using a tree-based model.

@@ -1,4 +1,5 @@
 from sklearn.ensemble import RandomForestRegressor
+import numpy as np
 
 def get_tree_paths(tree,feature_names):
     paths = []
@@ -69,3 +70,29 @@ def merge_constraints(constraints_list):
     def fmt(val):
         return int(val) if val == int(val) else val
     return ','.join(f"{feat}{op}{fmt(val)}" for feat, (op, val) in merged.items())
+
+def Latin_sample(file, num_samples):
+    def round_num(num, discrete_list):
+        max_num = float('inf')
+        return_num = 0
+        for i in discrete_list:
+            if abs(num-i) < max_num:
+                max_num = abs(num-i)
+                return_num = i
+        return return_num
+    variables = {}
+    bounds = file.independent_set
+    for i in range(len(bounds)):
+        if len(bounds[i]) == 1:
+            bounds[i].append(1.1) 
+    for i in range(len(file.independent_set)):
+        variables[file.features[i]] = bounds[i]
+    from doepy import build
+    sample = build.space_filling_lhs(variables, num_samples)
+    data_array = np.array(sample)
+    data_list = data_array.tolist()
+    for i in range(len(data_list)):
+        for j in range(len(data_list[i])):
+            data_list[i][j] = round_num(data_list[i][j],file.independent_set[j])
+
+    return data_list
