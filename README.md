@@ -33,7 +33,7 @@ This repository contains the data and code for the following paper:
    - requirements.txt => Essential requirments need to be installed <br>
    - PromiseTune.py => The reproduction code of PromiseTune
 
-##  <a name='quick-start'>Quick Start
+##  <a name='quick-start'></a> Quick Start
 
 * Python 3.8+
 
@@ -47,7 +47,7 @@ And you can run the below code to have a quick start:
 cd ./Code
 python3 PromiseTune.py
 ```
-If you have your own dataset, put the CSV file in "Code/Data/" and the target need to start with "$<". The default is minimize the target, if maximize please reverse the target. Finally, add it to the datasets list and run PromiseTune.
+Note: If you have your own dataset, put the CSV file in "Code/Data/" and the target need to start with "$<". The default is minimize the target, if maximize please reverse the target. Finally, add it to the datasets list and run PromiseTune.
 
 
 ## <a name='tuners'></a>State-of-the-Art Tuners
@@ -78,15 +78,15 @@ Below are the repositories of the SOTA performance prediction models, which are 
 ## RQ reproduction
 - **RQ1 Effectiveness**: To measure the effectiveness of our method, you can directly run [Quick Start](#quick-start). The other SOTA methods being compared are described in [State-of-the-Art Tuners](#tuners).
 
-- **RQ2 Ablation**: Compare the differences when the key component rules are turned on or off:
+- **RQ2 Ablation**: Compare the differences when the key component rules are uesd or not used:
 
    ```Set line 262 with 'rule = False'.```
 
-- **RQ3 Sensitivity**: Analyze the sensitivity of the key parameter l, and set it to 5 or 10 or 15 or 20:
+- **RQ3 Sensitivity**: Analyze the sensitivity of the key parameter $l$, and set it to 5, 10, 15 or 20:
 
    ```Set line 263 with 'l = 5'.```
 
-- **RQ4 Explainability Case Study**: Conduct a case study on the explainability of the method using the system **x264** as an example. 
+- **RQ4 Explainability Case Study**: Use the system **x264** as an example to conduct a case study on the explainability of PromiseTune:
 
    ```Set line 272 with 'systems = ['x264']' ```
 
