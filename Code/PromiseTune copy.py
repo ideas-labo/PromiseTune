@@ -15,13 +15,16 @@ from util.matrix import get_adjacency_matrix
 from util.helper import get_tree_paths, has_negative_value, in_rule, Model, merge_constraints, Latin_sample
 from util.ei import get_ei
 
-def cause_find(training_indep, training_dep, file, sample):
+def cause_find(training_indep,training_dep,file,sample):
     global sample_plus
-    feature_names = file.features
     n = 8
+    feature_names = file.features
     all_path = []
     model = RandomForestRegressor(n_estimators=n, min_samples_leaf=int(sample))
     model.fit(training_indep, training_dep)
+    feature_sort = [[i, x] for i, x in enumerate(feature_names)]  # 特征及特征编号
+    feature_selected = sorted(feature_sort, key=lambda x: x[1], reverse=True)[:]  # 选出来的重要特征
+
     sub_trees = model.estimators_
     for _, sub_tree in enumerate(sub_trees):
         paths = get_tree_paths(sub_tree, feature_names)
@@ -43,7 +46,7 @@ def cause_find(training_indep, training_dep, file, sample):
         ACEs, valid_rules = model_fit(new_rows, all_path, feature_names, new_perfs)
     return ACEs, valid_rules
     
-def model_fit(new_rows, all_path, feature_names, new_perfs):
+def model_fit(new_rows,all_path,feature_names,new_perfs):
     column_names = copy.deepcopy(feature_names)
     training_indep_new = copy.deepcopy(new_rows)
     for i,x in enumerate(new_rows):
@@ -82,7 +85,7 @@ def model_fit(new_rows, all_path, feature_names, new_perfs):
         if ACE:
             valid_rules.append(all_path[k])
             ACEs.append(ACE)
-    return ACEs, valid_rules
+    return ACEs,valid_rules
 
 def random_search_with_static_distribution(max_iterations, stop_threshold, y, estimators, eta, every_column):
     best_value = float('-inf')
@@ -145,6 +148,7 @@ def get_training_sequence_by_PromiseTune(training_indep, training_dep, eta, file
     every_column = file.independent_set
     header = file.features
     Rule, candidates = [], []
+
     if rule == True:
         ACEs, all_path = cause_find(training_indep, training_dep, file, sample+sample_plus)
         for i, path in zip(ACEs, all_path):
@@ -213,9 +217,12 @@ def PromiseTune(filename, initial_size, maxlives, budget, seed, rule, l, k):
     steps, sample_plus = 0, 0
     configuration_b = None
     results, x_axis, xs, Rules = [], [], [], []
+
     lives = maxlives
     file = read_file.get_data(filename, initial_size, seed)
     training_indep = [t.decision for t in file.training_set]
+
+
     training_dep = []
     for action in training_indep:
         reward,configuration = get_objective.get_objective(file.dict_search, action)
@@ -223,6 +230,7 @@ def PromiseTune(filename, initial_size, maxlives, budget, seed, rule, l, k):
         xs.append(action)
         results.append(reward)    
     result = min(results)
+
     exist_configuration = training_indep[:]
     while initial_size + steps < budget:
         steps += 1
@@ -254,13 +262,13 @@ def PromiseTune(filename, initial_size, maxlives, budget, seed, rule, l, k):
 def run_main(seed, name):
     best_configuration, Rules = PromiseTune(
         filename=f"./Data/{name}.csv",
-        initial_size=10,
+        initial_size=100,
         maxlives=200,
-        budget=100,
+        budget=101,
         seed=seed,
         rule=True,
         l=10,
-        k=0.1
+        k=0.5
     )
     print(best_configuration, Rules)
 
@@ -268,9 +276,7 @@ if __name__ == '__main__':
     seeds = [0]
     # mp.freeze_support()
     # pool = mp.Pool(processes=200)
-    systems = ['exastencils','dconvert','7z',"BDBC",'deeparch',
-                 'PostgreSQL','javagc','storm','x264',
-                 'redis', 'HSQLDB','LLVM']
+    systems = ['x264']
     for name in systems:
         for seed in seeds:
             run_main(seed, name)

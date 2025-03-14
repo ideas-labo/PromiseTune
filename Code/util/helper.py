@@ -60,13 +60,7 @@ def merge_constraints(constraints_list):
         else:
             cur_op, cur_val = merged[feat]
             if op == cur_op:
-                if op == '<':
-                    merged[feat] = (op, min(cur_val, val))
-                else:
-                    merged[feat] = (op, max(cur_val, val))
-    for feat in merged:
-        if counts[feat] == 1 and merged[feat][0] == '<':
-            merged[feat] = ('>', merged[feat][1])
+                merged[feat] = (op, min(cur_val, val)) if op == '<' else (op, max(cur_val, val))
     def fmt(val):
         return int(val) if val == int(val) else val
     return ','.join(f"{feat}{op}{fmt(val)}" for feat, (op, val) in merged.items())
@@ -84,7 +78,7 @@ def Latin_sample(file, num_samples):
     bounds = file.independent_set
     for i in range(len(bounds)):
         if len(bounds[i]) == 1:
-            bounds[i].append(1.1) 
+            bounds[i].append(1) 
     for i in range(len(file.independent_set)):
         variables[file.features[i]] = bounds[i]
     from doepy import build
@@ -93,6 +87,7 @@ def Latin_sample(file, num_samples):
     data_list = data_array.tolist()
     for i in range(len(data_list)):
         for j in range(len(data_list[i])):
-            data_list[i][j] = round_num(data_list[i][j],file.independent_set[j])
+            data_list[i][j] = round_num(data_list[i][j], file.independent_set[j])
 
     return data_list
+
