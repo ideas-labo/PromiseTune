@@ -75,7 +75,7 @@ Below are the repositories of the SOTA performance prediction models, which are 
  - [OtterTune](https://github.com/cmu-db/ottertune): an automated database management system tuning tool that combines supervised and unsupervised machine learning methods to optimize database configurations by reusing previous tuning data to select important configuration knobs, map workloads, and recommend settings.
 
 
-## RQ reproduction
+## RQ Reproduction
 - **RQ1 Effectiveness**: To measure the effectiveness of our method, you can directly run [Quick Start](#quick-start). The other SOTA methods being compared are described in [State-of-the-Art Tuners](#tuners).
 
 - **RQ2 Ablation**: Compare the differences when the key component rules are uesd or not used:
@@ -89,5 +89,5 @@ Below are the repositories of the SOTA performance prediction models, which are 
 - **RQ4 Explainability Case Study**: Use the system **x264** as an example to conduct a case study on the explainability of PromiseTune. The specific data are provided in [data](./RQ_supplementary/RQ4/rules_in_x264.txt).
 
 
-##  RQ supplementary
+##  RQ Supplementary
 RQ_supplementary contains the specific supplementary files for Table2, Table3 and specific data of RQ4 of our paper.
