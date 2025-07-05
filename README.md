@@ -80,11 +80,11 @@ Below are the repositories of the SOTA performance prediction models, which are 
 
 - **RQ2 Ablation**: Compare the differences when the key component rules are uesd or not used:
 
-   ```Set line 261 with 'rule = False'.```
+   ```Set 'rule = False'.```
 
 - **RQ3 Sensitivity**: Analyze the sensitivity of the key parameter $l$, and set it to 5, 10, 15 or 20:
 
-   ```Set line 262 with 'l = 5'.```
+   ```Set 'l = x'.```
 
 - **RQ4 Explainability Case Study**: Use the system **x264** as an example to conduct a case study on the explainability of PromiseTune. The specific data are provided in [data](./RQ_supplementary/RQ4/rules_in_x264.txt).
 
