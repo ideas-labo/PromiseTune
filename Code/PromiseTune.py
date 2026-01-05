@@ -128,22 +128,60 @@ def model_fit(new_rows: List[List[Any]], all_path: List[Any], feature_names: Lis
     
     return ACEs, valid_rules
 
-def random_search_base(max_iterations: int, stop_threshold: float, estimators: List[Any], eta: float, x_generator) -> Tuple[List[List[Any]], float]:
+# def random_search_base(max_iterations: int, stop_threshold: float, estimators: List[Any], eta: float, x_generator) -> Tuple[List[List[Any]], float]:
+#     best_value = float('-inf')
+#     values, xs = [], []
+    
+#     for i in range(max_iterations):
+#         current_x = x_generator()
+#         pred = [e.predict([current_x]) for e in estimators]
+#         current_value = get_ei(pred, eta)[0]
+        
+#         xs.append(current_x)
+#         values.append(current_value)
+        
+#         if current_value > best_value:
+#             best_value = current_value
+            
+#         if i > 0:
+#             try:
+#                 kde = stats.gaussian_kde(values)
+#                 improvement_probability = 1 - kde.integrate_box_1d(-np.inf, best_value)
+#                 if improvement_probability < stop_threshold:
+#                     break
+#             except Exception:
+#                 break
+                
+#     return xs, best_value
+
+def random_search_base(max_iterations: int, stop_threshold: float, estimators: List[Any], eta: float, x_generator, batch_size: int = 100) -> Tuple[List[List[Any]], float]::
     best_value = float('-inf')
     values, xs = [], []
     
-    for i in range(max_iterations):
-        current_x = x_generator()
-        pred = [e.predict([current_x]) for e in estimators]
-        current_value = get_ei(pred, eta)[0]
+    for batch_start in range(0, max_iterations, batch_size):
+        batch_end = min(batch_start + batch_size, max_iterations)
+        current_batch_size = batch_end - batch_start
         
-        xs.append(current_x)
-        values.append(current_value)
+        batch_configs = [x_generator() for _ in range(current_batch_size)]
         
-        if current_value > best_value:
-            best_value = current_value
+        batch_predictions = []
+        for estimator in estimators:
+            batch_pred = estimator.predict(batch_configs)
+            batch_predictions.append(batch_pred)
+        
+        batch_predictions = np.array(batch_predictions).T
+        
+        for i, current_x in enumerate(batch_configs):
+            pred = batch_predictions[i]
+            current_value = get_ei([pred], eta)[0]
             
-        if i > 0:
+            xs.append(current_x)
+            values.append(current_value)
+            
+            if current_value > best_value:
+                best_value = current_value
+        
+        if len(values) > batch_size and len(values) % (batch_size * 2) == 0:
             try:
                 kde = stats.gaussian_kde(values)
                 improvement_probability = 1 - kde.integrate_box_1d(-np.inf, best_value)
@@ -151,7 +189,7 @@ def random_search_base(max_iterations: int, stop_threshold: float, estimators: L
                     break
             except Exception:
                 break
-                
+    
     return xs, best_value
 
 def random_search_with_static_distribution(max_iterations: int, stop_threshold: float, y: List[List[Any]], estimators: List[Any], eta: float, every_column: List[List[Any]]) -> Tuple[List[List[Any]], float]:
