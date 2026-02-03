@@ -15,12 +15,12 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from scipy.stats import mannwhitneyu
-from rpy2.robjects.packages import importr
-from rpy2.robjects import pandas2ri
-from scikit_posthocs import posthoc_nemenyi
+# from rpy2.robjects.packages import importr
+# from rpy2.robjects import pandas2ri
+# from scikit_posthocs import posthoc_nemenyi
 
 # 初始化设置
-pandas2ri.activate()
+# pandas2ri.activate()
 warnings.filterwarnings("ignore")
 
 def scott_test(learning_models, compared_results):
@@ -45,7 +45,7 @@ def scott_test(learning_models, compared_results):
     r_sk = sk.sk_esd(data, version="np")
     return r_sk
 
-def load_results(learning_model, name, seed, budget=50):  # Modify here to complete statistics for different budgets
+def load_results(learning_model, name, seed, budget=100):  # Modify here to complete statistics for different budgets
     """
     Load results for specified algorithm, dataset and seed
     
@@ -99,23 +99,23 @@ def main():
     """Main function to execute all data analysis and results generation"""
     # Configure algorithm models
     learning_models = [
-        "./results/Promisetune",   # Promisetune
-        "./results/random",        # random
-        "./results/unicorn",        # unicorn
+        "./results/PromiseTune",   # Promisetune
+        "./results/RANDOM",        # random
+        "./results/Unicorn",        # unicorn
         "./results/GA",             # GA
-        "./results/openbox",       # openbox
-        "./results/llamatune",     # llamatune
-        "./results/flash",         # flash
+        "./results/MBO",       # MBO
+        "./results/LlamaTune",     # llamatune
+        "./results/FLASH",         # flash
         "./results/CFSCA",         # CFSCA
         "./results/BOCA",          # BOCA
-        "./results/ottertune",       # ottertune
+        "./results/OtterTune",       # ottertune
         "./results/SMAC",            # SMAC
-        "./results/hebo",           # hebo
+        "./results/HEBO",           # hebo
     ]
     
     learning_modelss = [
-        'Promisetune', 'random', 'unicorn', 'GA', 'openbox', 
-        'llamatune', 'flash', 'CFSCA', 'BOCA', 'ottertune', 'SMAC', 'hebo'
+        'PromiseTune', 'RANDOM', 'Unicorn', 'GA', 'MBO', 
+        'LlamaTune', 'FLASH', 'CFSCA', 'BOCA', 'OtterTune', 'SMAC', 'HEBO'
     ]
     
     # Random seed list
@@ -154,11 +154,11 @@ def main():
             csv_writer = csv.writer(f)
             # Create empty minmax file
     
-    # Initialize markdown result file
-    with open('./scott_knott_results.md', 'w', encoding='utf-8') as f2:
-        f2.write("# Scott-Knott Rank Results\n\n")
-        f2.write("| Dataset | " + " | ".join(learning_modelss) + " |\n")
-        f2.write("|---------|" + "|".join(["--------"] * len(learning_modelss)) + "|\n")
+    # # Initialize markdown result file
+    # with open('./scott_knott_results.md', 'w', encoding='utf-8') as f2:
+    #     f2.write("# Scott-Knott Rank Results\n\n")
+    #     f2.write("| Dataset | " + " | ".join(learning_modelss) + " |\n")
+    #     f2.write("|---------|" + "|".join(["--------"] * len(learning_modelss)) + "|\n")
     
     # Create normalized performance and variance files
     with open('./normalized_performance.md', 'w', encoding='utf-8') as f_perf:
@@ -188,7 +188,6 @@ def main():
                 # Try to read result file
                 kk = 0
                 file_path = f'./{learning_model}/{name}{seed}.csv'
-                
                 # If file doesn't exist, try other seeds
                 while not os.path.exists(file_path):
                     # Special handling for unicorn
@@ -295,30 +294,30 @@ def main():
             var_row = f"| **{display_name}** | " + " | ".join([f"{var:.3f}" for var in normalized_variances]) + " |\n"
             f_var.write(var_row)
         
-        # Execute Scott-Knott test
-        result = scott_test(learning_models, normalized_compared_results)
-        column_order = list(result[3])
-        rank = result[1].astype("int")
+        # # Execute Scott-Knott test
+        # result = scott_test(learning_models, normalized_compared_results)
+        # column_order = list(result[3])
+        # rank = result[1].astype("int")
         
-        # Sort and output results
-        print_ = sorted(zip(column_order, rank), key=lambda x: x[0])
-        scott_res = [i[1] for i in print_]
+        # # Sort and output results
+        # print_ = sorted(zip(column_order, rank), key=lambda x: x[0])
+        # scott_res = [i[1] for i in print_]
         
-        # Reverse the ranks (higher rank represents better performance)
-        max_rank = max(scott_res)
-        scott_res_reversed = [max_rank + 1 - rank for rank in scott_res]
-        all_ranks.append(scott_res_reversed)
+        # # Reverse the ranks (higher rank represents better performance)
+        # max_rank = max(scott_res)
+        # scott_res_reversed = [max_rank + 1 - rank for rank in scott_res]
+        # all_ranks.append(scott_res_reversed)
         
-        # Append results to markdown file
-        with open('./scott_knott_results.md', 'a', encoding='utf-8') as f2:
-            rank_row = f"| **{display_name}** | " + " | ".join([str(rank) for rank in scott_res_reversed]) + " |\n"
-            f2.write(rank_row)
+        # # Append results to markdown file
+        # with open('./scott_knott_results.md', 'a', encoding='utf-8') as f2:
+        #     rank_row = f"| **{display_name}** | " + " | ".join([str(rank) for rank in scott_res_reversed]) + " |\n"
+        #     f2.write(rank_row)
     
     # Calculate average ranks
-    avg_ranks = []
-    for i in range(len(learning_modelss)):
-        avg_rank = sum(ranks[i] for ranks in all_ranks) / len(all_ranks)
-        avg_ranks.append(round(avg_rank, 2))
+    # avg_ranks = []
+    # for i in range(len(learning_modelss)):
+    #     avg_rank = sum(ranks[i] for ranks in all_ranks) / len(all_ranks)
+    #     avg_ranks.append(round(avg_rank, 2))
     
     # Calculate average normalized performance and variance
     avg_performances = []
@@ -330,10 +329,10 @@ def main():
         avg_variances.append(round(avg_var, 3))
     
     # Add average rank, performance and variance to corresponding files
-    with open('./scott_knott_results.md', 'a', encoding='utf-8') as f2:
-        f2.write("\n")
-        avg_rank_row = f"| **Average Rank** | " + " | ".join([str(rank) for rank in avg_ranks]) + " |\n"
-        f2.write(avg_rank_row)
+    # with open('./scott_knott_results.md', 'a', encoding='utf-8') as f2:
+    #     f2.write("\n")
+    #     avg_rank_row = f"| **Average Rank** | " + " | ".join([str(rank) for rank in avg_ranks]) + " |\n"
+    #     f2.write(avg_rank_row)
     
     with open('./normalized_performance.md', 'a', encoding='utf-8') as f_perf:
         f_perf.write("\n")
@@ -345,7 +344,7 @@ def main():
         avg_var_row = f"| **Average Variance** | " + " | ".join([f"{var:.3f}" for var in avg_variances]) + " |\n"
         f_var.write(avg_var_row)
     
-    print("Average ranks:", avg_ranks)
+    # print("Average ranks:", avg_ranks)
     print("Average normalized performance:", avg_performances)
     print("Average variance:", avg_variances)
 

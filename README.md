@@ -129,6 +129,8 @@ This section provides detailed instructions to reproduce all four research quest
 ```bash
 python3 rq1_effectiveness.py
 ```
+**Note**:
+- We do not use skott-knott in this version because it need R package which is not easy to install. If you want to use it, please install R package first and run rq1_effectiveness_test.py
 
 **What it does**:
 - Compares results with baseline methods (stored in `results/` directory)

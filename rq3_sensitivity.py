@@ -120,13 +120,13 @@ def main():
     # Configure model paths under different parameter values
     learning_models = [
         "./parameter_results/Promisetune_ultra_5",        # Parameter value 5
-        "./parameter_results/Promisetune_ultra_15",       # Parameter value 15
         "./parameter_results/Promisetune_ultra_1",        # Parameter value 10
+        "./parameter_results/Promisetune_ultra_15",       # Parameter value 15
         "./parameter_results/Promisetune_ultra_20"        # Parameter value 20
     ]
     
-    model_labels = ['ultra_5', 'ultra_15', 'ultra_10', 'ultra_20']
-    parameter_values = [5, 15, 10, 20]  # Corresponding parameter values
+    model_labels = ['ultra_5', 'ultra_10', 'ultra_15',  'ultra_20']
+    parameter_values = [5, 10, 15,  20]  # Corresponding parameter values
     
     # Number of experiment repetitions
     seeds = range(1, 31)

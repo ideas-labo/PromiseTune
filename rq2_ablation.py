@@ -94,8 +94,8 @@ def process_result_file(file_path, min_value, max_value):
 def main():
     # Configure experimental models
     learning_models = [
-        "./results/Promisetune_wocause",  # Model without causal analysis
-        "./results/Promisetune"         # Complete model
+        "./results/PromiseTune_wocause",  # Model without causal analysis
+        "./results/PromiseTune"         # Complete model
     ]
     learning_modelss = ['promisetune w/o', 'promisetune']  # Model abbreviations
     
@@ -218,12 +218,18 @@ def main():
                 row_data.extend(parts)
                 
                 # Print debug information
-                if is_last_budget:
-                    print(f"p-value: {p_value}")
+                # if is_last_budget:
+                #     print(f"p-value: {p_value}")
                 
                 mean_wo = np.mean(budget_results[0])  # w/o causal
                 mean_w = np.mean(budget_results[1])   # w/ causal
-                improvement = (mean_wo - mean_w) / mean_wo if mean_wo != 0 else float('inf')
+                if mean_wo == 0:
+                    improvement = 0
+                else:
+                    improvement = (mean_wo - mean_w) / mean_wo
+                    if improvement < 0:
+                        improvement = 0
+
                 print(f"Mean comparison: w/o causal={mean_wo:.3f} vs w/ causal={mean_w:.3f}, Improvement rate: {improvement:.3%}")
             
             # Write the complete row for this system

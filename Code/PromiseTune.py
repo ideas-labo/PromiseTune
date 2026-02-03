@@ -154,7 +154,7 @@ def model_fit(new_rows: List[List[Any]], all_path: List[Any], feature_names: Lis
                 
 #     return xs, best_value
 
-def random_search_base(max_iterations: int, stop_threshold: float, estimators: List[Any], eta: float, x_generator, batch_size: int = 100) -> Tuple[List[List[Any]], float]::
+def random_search_base(max_iterations: int, stop_threshold: float, estimators: List[Any], eta: float, x_generator, batch_size: int = 100) -> Tuple[List[List[Any]], float]:
     best_value = float('-inf')
     values, xs = [], []
     
