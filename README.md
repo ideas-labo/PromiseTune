@@ -71,6 +71,13 @@ pip install -r requirements.txt
 
 ## Usage
 
+### Update (2026-03)
+
+- Added configurable causal refresh interval support for PromiseTune.
+- You can now control how frequently the causal model is refreshed via `causal_refresh_interval`.
+- Larger interval values (e.g., 10) reduce causal-model rebuild frequency and often reduce runtime.
+
+
 ### Basic Usage Example
 
 After installation, verify that PromiseTune is working correctly with this basic test:
